@@ -6,6 +6,9 @@ import android.content.Intent
 import android.Manifest
 import android.app.*
 import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.net.Uri
