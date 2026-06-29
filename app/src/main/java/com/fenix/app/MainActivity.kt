@@ -1,13 +1,10 @@
 package com.fenix.app
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.fenix.app.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,82 +13,67 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
-import org.json.JSONObject
-import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val client = OkHttpClient()
-    private lateinit var adapter: ThingsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = ThingsAdapter()
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = adapter
-
-        binding.refreshButton.setOnClickListener {
-            fetchThings()
-        }
-
-        fetchThings()
+        fetchData()
     }
 
-    private fun fetchThings() {
+    private fun fetchData() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val request = Request.Builder()
                     .url("https://jsonplaceholder.typicode.com/posts")
                     .build()
-
                 client.newCall(request).execute().use { response ->
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                    val jsonArray = JSONArray(response.body?.string())
-                    val thingsList = mutableListOf<String>()
-
+                    val jsonArray = JSONArray(response.body!!.string())
+                    val posts = mutableListOf<Post>()
                     for (i in 0 until jsonArray.length()) {
-                        val jsonObject: JSONObject = jsonArray.getJSONObject(i)
-                        thingsList.add(jsonObject.getString("title"))
+                        val jsonObject = jsonArray.getJSONObject(i)
+                        posts.add(Post(jsonObject.getInt("id"), jsonObject.getString("title")))
                     }
-
                     withContext(Dispatchers.Main) {
-                        adapter.updateData(thingsList)
+                        binding.recyclerView.adapter = PostAdapter(posts)
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@MainActivity, R.string.error_fetching_data, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
-    inner class ThingsAdapter : RecyclerView.Adapter<ThingsAdapter.ThingViewHolder>() {
+    data class Post(val id: Int, val title: String)
 
-        private var thingsList: List<String> = emptyList()
+    inner class PostAdapter(private val posts: List<Post>) :
+        RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
-        inner class ThingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val textView: TextView = itemView.findViewById(R.id.textView)
+        inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThingViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_thing, parent, false)
-            return ThingViewHolder(view)
+                .inflate(R.layout.item_post, parent, false)
+            return PostViewHolder(view)
         }
 
-        override fun onBindViewHolder(holder: ThingViewHolder, position: Int) {
-            holder.textView.text = thingsList[position]
+        override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+            holder.titleTextView.text = posts[position].title
         }
 
-        override fun getItemCount(): Int = thingsList.size
-
-        fun updateData(newData: List<String>) {
-            thingsList = newData
-            notifyDataSetChanged()
-        }
+        override fun getItemCount() = posts.size
     }
 }
