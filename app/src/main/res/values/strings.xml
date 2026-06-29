@@ -1,10 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AppFenix</string>
-    <string name="restart">Restart</string>
-    <string name="score">Score</string>
-    <string name="game_over">Game Over</string>
+    <string name="refresh">Refresh</string>
 </resources>
-```
-
-Este código elimina la dependencia de Kotlin Coroutines y utiliza un `Handler` para manejar el bucle de juego, lo que debería resolver el problema de compilación.
