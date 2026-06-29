@@ -1,7 +1,4 @@
 <resources>
     <string name="app_name">AppFenix</string>
-    <string name="refresh">Refresh</string>
+    <string name="error_fetching_data">Error fetching data</string>
 </resources>
-```
-
-Asegúrate de que el archivo `build.gradle` (Module: app) contenga las dependencias mencionadas para evitar errores de referencia no resueltos.
