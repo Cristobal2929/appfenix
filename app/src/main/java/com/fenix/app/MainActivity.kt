@@ -3,16 +3,26 @@ package com.fenix.app
 import android.content.Context
 import android.graphics.*
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.fenix.app.databinding.ActivityMainBinding
-import kotlinx.coroutines.*
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnable = object : Runnable {
+        override fun run() {
+            binding.gameView.update()
+            binding.gameView.invalidate()
+            handler.postDelayed(this, 16L) // ~60 FPS
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +31,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnRestart.setOnClickListener {
             binding.gameView.resetGame()
+            handler.removeCallbacks(runnable)
+            handler.post(runnable)
         }
+
+        handler.post(runnable)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(runnable)
     }
 }
 
@@ -52,14 +71,10 @@ class GameView(context: Context, attrs: AttributeSet? = null) : View(context, at
     private var score = 0
     private var gameOver = false
 
-    private var gameJob: Job? = null
-    private val scope = MainScope()
-
     init {
         // Start the game loop after the view has been laid out
         post {
             resetGame()
-            startLoop()
         }
     }
 
@@ -71,26 +86,13 @@ class GameView(context: Context, attrs: AttributeSet? = null) : View(context, at
         gameOver = false
     }
 
-    private fun startLoop() {
-        gameJob?.cancel()
-        gameJob = scope.launch(Dispatchers.Default) {
-            while (isActive) {
-                if (!gameOver) {
-                    update()
-                }
-                withContext(Dispatchers.Main) {
-                    invalidate()
-                }
-                delay(16L) // ~60 FPS
-            }
-        }
-    }
+    fun update() {
+        if (gameOver) return
 
-    private fun update() {
         // Randomly spawn an enemy
-        if (Math.random() < 0.02) {
+        if (Random.nextDouble() < 0.02) {
             val size = 60f
-            val x = (size..(width - size)).random()
+            val x = (size..(width - size)).random().toFloat()
             val speed = (5..15).random().toFloat()
             enemies.add(Enemy(x, -size, size, speed))
         }
@@ -116,9 +118,9 @@ class GameView(context: Context, attrs: AttributeSet? = null) : View(context, at
             shipX + shipSize,
             shipY + shipSize
         )
-        val dx = Math.max(shipRect.left, Math.min(enemy.x, shipRect.right))
-        val dy = Math.max(shipRect.top, Math.min(enemy.y, shipRect.bottom))
-        val distance = Math.hypot((dx - enemy.x).toDouble(), (dy - enemy.y).toDouble())
+        val dx = maxOf(shipRect.left, minOf(enemy.x, shipRect.right))
+        val dy = maxOf(shipRect.top, minOf(enemy.y, shipRect.bottom))
+        val distance = hypot((dx - enemy.x).toDouble(), (dy - enemy.y).toDouble())
         return distance < enemy.size
     }
 
@@ -157,11 +159,5 @@ class GameView(context: Context, attrs: AttributeSet? = null) : View(context, at
             invalidate()
         }
         return true
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        gameJob?.cancel()
-        scope.cancel()
     }
 }
