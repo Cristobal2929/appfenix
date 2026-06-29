@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AppFenix</string>
+    <string name="pause">Pausar</string>
+    <string name="resume">Reanudar</string>
+    <string name="original_text_placeholder">Texto original aparecerá aquí</string>
+    <string name="translated_text_placeholder">Traducción aparecerá aquí</string>
+    <string-array name="source_languages">
+        <item>Francés</item>
+        <item>Inglés</item>
+        <item>Italiano</item>
+        <item>Portugués</item>
+        <item>Alemán</item>
+    </string-array>
+</resources>
