@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.fenix.app.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
@@ -67,22 +68,21 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private fun updateStatusUI() {
         if (isActive) {
             binding.btnPauseResume.text = getString(R.string.pause)
-            binding.viewStatus.setBackgroundColor(getColor(android.R.color.holo_green_dark))
+            binding.viewStatus.setBackgroundColor(
+                ContextCompat.getColor(this, android.R.color.holo_green_dark)
+            )
         } else {
             binding.btnPauseResume.text = getString(R.string.resume)
-            binding.viewStatus.setBackgroundColor(getColor(android.R.color.holo_red_dark))
+            binding.viewStatus.setBackgroundColor(
+                ContextCompat.getColor(this, android.R.color.holo_red_dark)
+            )
         }
     }
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
             val locale = Locale("es", "ES")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                tts?.setLanguage(locale)
-            } else {
-                @Suppress("DEPRECATION")
-                tts?.setLanguage(locale)
-            }
+            tts?.language = locale
         }
     }
 
