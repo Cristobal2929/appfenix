@@ -1,4 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AppFenix</string>
-    <string name="error_fetching_data">Error fetching data</string>
+    <string name="tab_voice">Voz</string>
+    <string name="tab_text">Texto</string>
+    <string name="start">Iniciar</string>
+    <string name="stop">Detener</string>
+    <string name="translate">Traducir</string>
+    <string name="copy">Copiar</string>
+    <string name="hint_input">Pega o escribe texto en francés</string>
+    <string name="voice_result_placeholder">Resultado de voz aparecerá aquí</string>
+    <string name="translation_placeholder">Traducción aparecerá aquí</string>
+    <string name="listening">Escuchando...</string>
+    <string name="stopped">Detenido</string>
+    <string name="error_empty">El texto está vacío</string>
+    <string name="error_speech">Error de reconocimiento</string>
+    <string name="error_translation">Error al traducir</string>
+    <string name="copied">Texto copiado al portapapeles</string>
 </resources>
