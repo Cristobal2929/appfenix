@@ -2,13 +2,13 @@ package com.fenix.app
 
 import android.view.View
 import android.content.Intent
-import android.net.Uri
 
 import android.Manifest
 import android.app.*
 import android.content.*
 import android.graphics.Color
 import android.graphics.PixelFormat
+import android.net.Uri
 import android.os.*
 import android.provider.Settings
 import android.speech.RecognitionListener
@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.fenix.app.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
