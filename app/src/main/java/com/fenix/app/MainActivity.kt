@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         setContentView(binding.root)
 
         // Initialize Spinner
-        val adapter = androidx.appcompat.widget.ArrayAdapter.createFromResource(
+        val adapter = android.widget.ArrayAdapter.createFromResource(
             this,
             R.array.source_languages,
             android.R.layout.simple_spinner_item
