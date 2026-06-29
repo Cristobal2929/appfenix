@@ -5,3 +5,6 @@
     <string name="score">Score</string>
     <string name="game_over">Game Over</string>
 </resources>
+```
+
+Este código elimina la dependencia de Kotlin Coroutines y utiliza un `Handler` para manejar el bucle de juego, lo que debería resolver el problema de compilación.
