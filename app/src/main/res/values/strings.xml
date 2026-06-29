@@ -4,15 +4,4 @@
 </resources>
 ```
 
-Asegúrate de agregar las siguientes dependencias en tu archivo `build.gradle` (Module: app):
-
-```gradle
-dependencies {
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'androidx.recyclerview:recyclerview:1.3.0'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-}
-```
-
-Esto debería resolver los problemas de compilación relacionados con las dependencias y las referencias no resueltas.
+Asegúrate de que el archivo `build.gradle` (Module: app) contenga las dependencias mencionadas para evitar errores de referencia no resueltos.
