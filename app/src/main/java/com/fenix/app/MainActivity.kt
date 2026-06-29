@@ -1,10 +1,15 @@
 package com.fenix.app
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.fenix.app.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +18,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -61,12 +67,12 @@ class MainActivity : AppCompatActivity() {
         RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
         inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
+            val titleTextView: TextView = itemView.findViewById(android.R.id.text1)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_post, parent, false)
+                .inflate(android.R.layout.simple_list_item_1, parent, false)
             return PostViewHolder(view)
         }
 
